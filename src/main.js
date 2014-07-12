@@ -19,22 +19,28 @@ define(function(require, exports, module) {
         HELIX : 2
     }
 
-    // select your experience here
+    // select your scrolling experience here
     var outputType = outputTypeEnum.HELIX;
 
     // create scrollview
     var scrollview = new Scrollview({
         // changing the 2 numbers after the question 
         // mark changes the visibility of slides
-        margin: (outputType == outputTypeEnum.HELIX ? 200000 : 100000),
+        margin: (outputType == outputTypeEnum.HELIX ? 20000 : 100),
         // scroll view options 
         // (still playing around with 
         // these to figure out what they do)
+
+        // in the meantime, these options 
+        // are sufficient for intuitive
+        // physics-like movement
         direction: 1,
         paginated: true,
-        pagePeriod: 500,
-        pageSwitchSpeed: 10,
-        speedLimit: 10,
+        friction: 0.005,
+        drag: 10,
+        pagePeriod: 250,
+        pageSwitchSpeed: 0.01,
+        speedLimit: .025,
     });
 
     // keep track of all our slides
@@ -44,13 +50,13 @@ define(function(require, exports, module) {
     // through our array of slides
     scrollview.sequenceFrom(slides);
 
-    // send all scrollview events
-    // to the Engine
+    // send all scrollview 
+    // events to the Engine
     Engine.pipe(scrollview);
 
     // text content for each surface
     var text = [
-        "<br/><br/> Second Presentation Using Famo.us",
+        "<br/><br/><br/> Second Presentation <br/> Using Famo.us",
     ];
 
     for(var i = 1; i < 10; i++) {
@@ -101,9 +107,9 @@ define(function(require, exports, module) {
             case (outputTypeEnum.Z_SCROLLER): 
                 return Transform.translate(offset/2, offset/2, offset);
             case (outputTypeEnum.CAROUSEL):
-                return Transform.moveThen([0, 0, 500], Transform.rotateY(0.003 * offset));
+                return Transform.moveThen([0, 0, 500], Transform.rotateZ(0.003 * offset));
             case (outputTypeEnum.HELIX):
-                return Transform.moveThen([0, offset/4, 300], Transform.rotateY(0.005 * offset));
+                return Transform.moveThen([0, offset/4, 300], Transform.rotateZ(0.005 * offset));
         }
         
     });
